@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Evs.Pam.Api" Version="11194.0.0" />
+    <PackageReference Include="Evs.Pam.Orchestrator.Nearline.Asset.Protobuf" Version="11.2.0-pre-6222" />
+    <PackageReference Include="Evs.Pam.Orchestrator.Recorder.Group.Protobuf" Version="12.1.0-pre-6363" />
+    <PackageReference Include="Evs.Pam.Service.Xtbridge.Protobuf" Version="11.2.0-pre-6230" />
+    <PackageReference Include="Evs.Phoenix.Utils.Bus.Kafka" Version="36.6.0" />
+    <PackageReference Include="evs.xt.via.proto.api" Version="1.0.0" />
+    <PackageReference Include="Streamiz.Kafka.Net.SchemaRegistry.SerDes.Avro" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Factories\" />
+    <Folder Include="Mappers\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Streamiz.Kafka.Net">
+      <HintPath>..\..\..\..\..\..\Desktop\Streamiz.Kafka.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

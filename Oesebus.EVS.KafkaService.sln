@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oesebus.EVS.KafkaService.Application.Host", "Oesebus.Payment.Application.Host\Oesebus.EVS.KafkaService.Application.Host.csproj", "{A170AC7B-5430-4CE2-99F3-9473E55B1031}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oesebus.EVS.KafkaService.Infrastructure", "Oesebus.Payment.Infrastructue\Oesebus.EVS.KafkaService.Infrastructure.csproj", "{E7B98571-F701-43F6-8212-D48138EBAAE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oesebus.EVS.KafkaService.Application.Core", "Oesebus.Payment.Application.Core\Oesebus.EVS.KafkaService.Application.Core.csproj", "{AFF07B29-A749-4E6C-BF07-408FF62C0B6A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oesebus.EVS.KafkaService.Domain", "Oesebus.Payment.Domain\Oesebus.EVS.KafkaService.Domain.csproj", "{2E745818-AACB-44DD-83E8-7BFD3F6F9558}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A170AC7B-5430-4CE2-99F3-9473E55B1031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A170AC7B-5430-4CE2-99F3-9473E55B1031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A170AC7B-5430-4CE2-99F3-9473E55B1031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A170AC7B-5430-4CE2-99F3-9473E55B1031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7B98571-F701-43F6-8212-D48138EBAAE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7B98571-F701-43F6-8212-D48138EBAAE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7B98571-F701-43F6-8212-D48138EBAAE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7B98571-F701-43F6-8212-D48138EBAAE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF07B29-A749-4E6C-BF07-408FF62C0B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF07B29-A749-4E6C-BF07-408FF62C0B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF07B29-A749-4E6C-BF07-408FF62C0B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF07B29-A749-4E6C-BF07-408FF62C0B6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E745818-AACB-44DD-83E8-7BFD3F6F9558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E745818-AACB-44DD-83E8-7BFD3F6F9558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E745818-AACB-44DD-83E8-7BFD3F6F9558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E745818-AACB-44DD-83E8-7BFD3F6F9558}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {920BEE9D-5284-4271-9DB3-11D0DB06832B}
+	EndGlobalSection
+EndGlobal
