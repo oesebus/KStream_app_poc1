@@ -1,22 +1,20 @@
 {
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "Debug": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  },
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:56407/",
       "sslPort": 44301
-    }
-  },
-  "profiles": {
-    "WSL": {
-      "commandName": "WSL2",
-      "distributionName": ""
-    },
-    "Profile 1": {
-      "commandName": "Executable",
-      "executablePath": "C:\\Users\\iidr\\Documents\\Architectures\\Codes\\kafkaStreamToplogy-master\\kafkaStreamToplogy-master\\Oesebus.Payment.Application.Host\\bin\\Debug\\net6.0\\Oesebus.EVS.KafkaService.Application.Host.exe",
-      "remoteDebugEnabled": false,
-      "nativeDebugging": true
     }
   }
 }

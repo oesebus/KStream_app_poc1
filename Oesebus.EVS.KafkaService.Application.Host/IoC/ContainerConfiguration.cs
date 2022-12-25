@@ -3,6 +3,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
+using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
 using Oesebus.EVS.KafkaService.Application.Host;
 using Oesebus.EVS.KafkaService.Application.Host.Factories;
 using Oesebus.EVS.KafkaService.Application.Host.Workers;
@@ -22,7 +23,6 @@ namespace Oesebus.Order.Application.Host.IoC
       Container.AddSingleton<ILogger>(toplogylogger)
                .AddSingleton(StreamConfigurator.Initialize())
                .AddToplogy(new EvsDicussionTopologyBuilder())
-               .AddSingleton((serviceProvider) => KafkaStreamFactory.Create(serviceProvider.GetServices<Topology>(), serviceProvider.GetRequiredService<IStreamConfig>()))
                .AddHostedService<DefaultTopologyStreamWorker>();
 
       return Container;

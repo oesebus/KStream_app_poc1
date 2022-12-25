@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Oesebus.EVS.KafkaService.Application.Core\Oesebus.EVS.KafkaService.Application.Core.csproj" />
-    <ProjectReference Include="..\Oesebus.Payment.Application.Core\Oesebus.EVS.KafkaService.Application.Core.csproj" />
   </ItemGroup>
 
 </Project>

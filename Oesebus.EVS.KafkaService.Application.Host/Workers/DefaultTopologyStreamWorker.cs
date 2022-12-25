@@ -10,13 +10,13 @@ namespace Oesebus.EVS.KafkaService.Application.Host.Workers
 {
   public class DefaultTopologyStreamWorker : IHostedService
   {
-    private readonly IEnumerable<KafkaStream> _apps;
-    private readonly IEnumerable<IBuilder> _topologies;
+    private readonly KafkaStream _app;
+    private readonly IBuilder _toplogyBuilder;
     private readonly IStreamConfig _streamConfig;
-    public DefaultTopologyStreamWorker(IEnumerable<KafkaStream> apps, IEnumerable<IBuilder> topologies, IStreamConfig streamConfig)
+    public DefaultTopologyStreamWorker(KafkaStream apps, IBuilder topology, IStreamConfig streamConfig)
     {
-      _apps = apps;
-      _topologies = topologies;
+      _app = apps;
+      _toplogyBuilder = topology;
       _streamConfig = streamConfig;
     }
 
@@ -29,24 +29,14 @@ namespace Oesebus.EVS.KafkaService.Application.Host.Workers
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-      foreach (var kstreamApp in _apps)
-      {
-        kstreamApp.Dispose();
-      }
+      _app.Dispose();
+
       return Task.CompletedTask;
     }
     private async Task StartKafkaStreamsAsync(CancellationToken cancellationToken)
     {
-      ///Set up topologies requirements
-      foreach (var t in _topologies)
-      {
-        await t.Prerequisites(_streamConfig).ConfigureAwait(false);
-      }
-      ///Set up KStream apps requirements first
-      foreach (var kstreamApp in _apps)
-      {
-        await kstreamApp.StartAsync(cancellationToken);
-      }
+        await _toplogyBuilder.Prerequisites(_streamConfig).ConfigureAwait(false);
+        await _app.StartAsync(cancellationToken);
     }
   }
 }

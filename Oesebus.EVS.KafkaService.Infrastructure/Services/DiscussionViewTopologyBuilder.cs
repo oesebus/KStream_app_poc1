@@ -56,22 +56,6 @@ namespace Oesebus.Order.Infrastructure.Services
       ServerAddedStream.To("ServerUpdatedStreamTopic");
       ServerAddedStream.To("ServerRemovedStreamTopic");
 
-      //private readonly IValueJoiner<InvoiceSerdes, User, UserSerDes> _UserOrderValueJoiner;
-      //private readonly Materialized<string, InvoiceSerdes, Streamiz.Kafka.Net.State.IKeyValueStore<Streamiz.Kafka.Net.Crosscutting.Bytes, byte[]>> _materialized;
-
-      //IKStream<string, XtRecorderEvent> KS5 = builder.Stream("XtRecorderEvent", new StringSerDes(), new XtRecorderEventSerDes());
-      //IKStream<string, MamQueryCommand> KS6 = builder.Stream("MamQueryCommand_00000000-0000-0064-0146-000000364870", new StringSerDes(), new MamQueryCommandSerDes());
-
-      //KS6.Filter((_, v) => !v.GetMediaAssets.Filters.Contains(new MediaAssetFilterProperty() { FilterNodeId = new() { Value = { "5b437246-7b76-6c4f-0000-000000000000" } } })).To("MamQueryCommandInvestigator");
-
-      //var KS7 = KS6.Filter((_, v) => v.GetMediaAssets.Filters.Contains(new MediaAssetFilterProperty() { FilterNodeId = new() { Value = { "5b437246-7b76-6c4f-0000-000000000000" } } }));
-
-      //KS7.Print(Printed<string, MamQueryCommand>.ToOut());
-
-      //KS0.Peek((k, v) => Console.WriteLine($"XyBridgeEvent =>  Key {k} ## Specific Case {v.SpecificCase}"));
-
-      //KS0.Foreach((k, v) => Console.WriteLine($" Key {k} ## Specific Case {v.SpecificCase}"));
-
       ///Select discussion ID as a key first and map values to a BridgeDiscussion model for all streams .
       var KS0Keyed = KS0.Filter((_, v) => v.SpecificCase is not XtBridgeEvent.SpecificOneofCase.None).MapValues((v) => StoryBuilder.Map(v));
 
@@ -85,17 +69,17 @@ namespace Oesebus.Order.Infrastructure.Services
 
       var KS3Keyed = KS3.Filter((_, v) => v.SpecificCase is not XtBridgeCommand.SpecificOneofCase.None).SelectKey((_, v) => v.Headers.DiscussionId).MapValues((v) => StoryBuilder.Map(v));
 
-      KS3Keyed.Print(Printed<string, StoryBuilder>.ToOut());
+      //KS3Keyed.Print(Printed<string, StoryBuilder>.ToOut());
 
       var KS4Keyed = KS4.SelectKey((_, v) => v.Headers.DiscussionId).MapValues((v) => StoryBuilder.Map(v));
 
       /// Merge BridgeDiscussion streams togeteher to have a larger stream before aggregate operations on it
-      var mergedRawDiscussion = KS0Keyed.Merge(KS1Keyed)
-                                        .Merge(KS2Keyed)
-                                        .Merge(KS3Keyed)
-                                       /// Aggregate records and push it in a InMemory Materialized view (For quering purposes through API)
-                                       .GroupByKey().Aggregate(() => new DiscussionSummary(), (_, v, old) => old.Aggregate(v),
-                                        RocksDb.As<string, DiscussionSummary>("mBridgeAggregateView").WithValueSerdes<DiscussionAggregatorSerDes>());
+      //var mergedRawDiscussion = KS0Keyed.Merge(KS1Keyed)
+      //                                  .Merge(KS2Keyed)
+      //                                  .Merge(KS3Keyed)
+      //                                 /// Aggregate records and push it in a InMemory Materialized view (For quering purposes through API)
+      //                                 .GroupByKey().Aggregate(() => new DiscussionSummary(), (_, v, old) => old.Aggregate(v),
+      //                                  RocksDb.As<string, DiscussionSummary>("mBridgeAggregateView").WithValueSerdes<DiscussionAggregatorSerDes>());
 
       ///Hash(key) % nb Partitions
       ///Merge BridgeDiscussion streams togeteher to have a larger stream before aggregate operations on it
@@ -140,66 +124,11 @@ namespace Oesebus.Order.Infrastructure.Services
 
       //mergedRawDiscussion.ToStream().Print(Printed<string, DiscussionSummary>.ToOut());
 
-      //ServerAddedStream.Print(Printed<string, XtBridgeEvent>.ToOut());
-      //ServerUpdatedStream.Print(Printed<string, XtBridgeEvent>.ToOut());
-      //ServerRemovedStream.Print(Printed<string, XtBridgeEvent>.ToOut());
-
-      ///GroupBy discussion ID to prepare for discussion aggregations
-      //var groupedStreamByDiscussionId = KS0.GroupBy((_, v) => v.Headers.DiscussionId);
-
-      /// Aggregate Point of sales with orders to calculate revenues per product
-      //var aggStream = groupedStream
-      //                    .WindowedBy(TumblingWindowOptions.Of(2000))
-      //                    .Aggregate();
-
-      //IKStream<string, User> KS1 = builder.Stream("User", new StringSerDes(), new StringSerDes())
-      //   .MapValues((_, v) => JsonSerializer.Deserialize<User>(v)); /// Parse json string into POSInvoice type
-
-      // Stream data will be compacted by key(Events/ facts-- > Updates)
-      //var InMemoryPosStore = KS0.ToTable();
-
-      //    ///Materialized View example
-      //var InvoiceTableView = KS0.ToTable(Materialized<string, Invoice,
-      //  Streamiz.Kafka.Net.State.IKeyValueStore<Streamiz.Kafka.Net.Crosscutting.Bytes, byte[]>>.Create(), "InvoiceStateStore");
-
-      //    var UserTableView = KS1.ToTable(Materialized<string, User,
-      //Streamiz.Kafka.Net.State.IKeyValueStore<Streamiz.Kafka.Net.Crosscutting.Bytes, byte[]>>.Create(), "UserStateStore");
-
-      ///Left join Invoice table with User table
-      //var RevenueKtable = InvoiceTableView.LeftJoin(UserTableView, (v1, v2) => _UserOrderValueJoiner.Apply(v1, v2));
-
-      ///Requirement 1 : we filter out those records whose delivery type is 'HOME-DELIVERY'
-      ///and then push all of those specific MessageRecords to the new topic 
-      //  KS0.Filter((_, v) => v.Delivery == DeliveryType.HomeDelivery).To<StringSerDes, InvoiceSerdes>("Shipment");
-
-      ///Print data to view logs in console output.
-      //KS0.Print(Printed<string, Invoice>.ToOut());
-
-      ///Requirement 2 : We filter out those records whose customer type is ‘PRIME’ and then push
-      //KS0.Filter((_, v) => v.customerType == CustomerType.Prime)
-      //  .MapValues(invoice => OrderCreated.MapEvent(invoice)).To("PrimeOrderEvent", "Prime");
-
-      ///Requirement 3: Select All invoices , mask all card number
-      //KS0.MapValues(async invoice => await _auditService.AnonymizeCard(invoice)).To("NotificationTopic");
-
-      /// Store in SQL Database Premium customer sales
-      //KS0.Filter((_, v) => v.customerType == CustomerType.Classic)
-      //    .Foreach((_, v) => CustomerService.Store(v));
-
-      //KS0.SelectKey(new InvoiceValueMapper(), "Select Key processor").To("POSKEYED");
-
       ///Build topology
-      return builder.Build();
 
-      //Display topology in console
-      //foreach (var item in _topology.Describe().SubTopologies)
-      //{
-      //  Console.WriteLine("Sub topoligy ID : " + item.Id);
-      //  foreach (var node in item.Nodes)
-      //  {
-      //    Console.WriteLine("Node ID : " + node.Name);
-      //  }
-      //}
+      var tp = builder.Build();
+      tp.Describe();
+      return tp;
     }
     public async Task Prerequisites(IStreamConfig streamConfig)
     {
@@ -213,33 +142,12 @@ namespace Oesebus.Order.Infrastructure.Services
                     new TopicSpecification { Name = "ServerRemovedStreamTopic", ReplicationFactor = 1, NumPartitions = 1 }
           };
 
-          //ServerAddedStream.To("ServerAddedStreamTopic");
-          //ServerAddedStream.To("ServerUpdatedStreamTopic");
-          //ServerAddedStream.To("ServerRemovedStreamTopic");
-
           await adminClient.CreateTopicsAsync(topicsInfo);
         }
         catch (CreateTopicsException e)
         {
           Console.WriteLine($"An error occured creating topic {e.Results[0].Topic}: {e.Results[0].Error.Reason}");
         }
-      }
-    }
-
-
-
-
-    private class StoryBuilderKeyValueMapper<T> : IKeyValueMapper<string, T, KeyValuePair<string, StoryBuilder>> where T : IHeaderMessage, new()
-    {
-      public KeyValuePair<string, StoryBuilder> Apply(string key, T value)
-      {
-        return new KeyValuePair<string, StoryBuilder>(key, new()
-        {
-          DiscussionId = key,
-          Domain = value.Headers.Domain,
-          Timestamp = value.Headers.Timestamp.ToDateTime(),
-          Server = value.Headers.SiteOrigin
-        });
       }
     }
   }
