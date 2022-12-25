@@ -9,6 +9,7 @@
     <Folder Include="StateStores\" />
     <Folder Include="Storage\" />
     <Folder Include="Stores\" />
+    <Folder Include="Topologies\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Oesebus.EVS.KafkaService.Application.Core\Oesebus.EVS.KafkaService.Application.Core.csproj" />
     <ProjectReference Include="..\Oesebus.Payment.Application.Core\Oesebus.EVS.KafkaService.Application.Core.csproj" />
   </ItemGroup>
 

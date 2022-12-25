@@ -7,7 +7,6 @@ using Confluent.Kafka;
 using Oesebus.EVS.KafkaService.Application.Core.Aggregates;
 using Oesebus.EVS.KafkaService.Application.Core.Models;
 using Oesebus.EVS.KafkaService.Application.Core.SerDes;
-using Oesebus.Order.Application.Core.Interfaces;
 using Streamiz.Kafka.Net;
 using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.Stream;
@@ -15,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Streamiz.Kafka.Net.Table;
-using Microsoft.Extensions.DependencyInjection;
+using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
 
 namespace Oesebus.Order.Infrastructure.Services
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Oesebus.Order.Application.Host.Workers;
 using Oesebus.Order.Application.Host.IoC;
 using System;
+using Oesebus.EVS.KafkaService.Application.Host.Workers;
 
 namespace Oesebus.Order.Application.Host
 {
@@ -30,13 +30,6 @@ namespace Oesebus.Order.Application.Host
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-              .ConfigureServices((hostContext, services) =>
-                {
-
-                    ContainerConfiguration.Initialize(services);
-
-                    services.AddHostedService<DefaultTopologyStreamWorker>();
                 }).UseConsoleLifetime();
     }
 }

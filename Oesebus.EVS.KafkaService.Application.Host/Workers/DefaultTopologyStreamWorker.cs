@@ -1,19 +1,19 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Oesebus.Order.Application.Core.Interfaces;
+using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
 using Streamiz.Kafka.Net;
 using Streamiz.Kafka.Net.Stream;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Oesebus.Order.Application.Host.Workers
+namespace Oesebus.EVS.KafkaService.Application.Host.Workers
 {
   public class DefaultTopologyStreamWorker : IHostedService
   {
     private readonly IEnumerable<KafkaStream> _apps;
-    private readonly IEnumerable<IBuilder<Topology>> _topologies;
+    private readonly IEnumerable<IBuilder> _topologies;
     private readonly IStreamConfig _streamConfig;
-    public DefaultTopologyStreamWorker(IEnumerable<KafkaStream> apps, IEnumerable<IBuilder<Topology>> topologies, IStreamConfig streamConfig)
+    public DefaultTopologyStreamWorker(IEnumerable<KafkaStream> apps, IEnumerable<IBuilder> topologies, IStreamConfig streamConfig)
     {
       _apps = apps;
       _topologies = topologies;

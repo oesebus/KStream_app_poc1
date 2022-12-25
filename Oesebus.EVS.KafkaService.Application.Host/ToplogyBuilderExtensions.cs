@@ -1,10 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.Extensions.DependencyInjection;
-using Oesebus.Order.Application.Core.Interfaces;
-using Oesebus.Order.Infrastructure.Services;
-using Streamiz.Kafka.Net;
-using Streamiz.Kafka.Net.Stream;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
 
 namespace Oesebus.EVS.KafkaService.Application.Host;
 

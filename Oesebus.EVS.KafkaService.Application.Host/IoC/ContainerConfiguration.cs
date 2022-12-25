@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 using Oesebus.EVS.KafkaService.Application.Host;
 using Oesebus.EVS.KafkaService.Application.Host.Factories;
-using Oesebus.Order.Application.Host.Workers;
+using Oesebus.EVS.KafkaService.Application.Host.Workers;
 using Oesebus.Order.Infrastructure.Services;
 using Streamiz.Kafka.Net;
 using Streamiz.Kafka.Net.SerDes;
