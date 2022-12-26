@@ -1,20 +1,18 @@
-﻿using Com.Evs.Pam.Common.Api;
-using Com.Evs.Pam.Orchestrator.Xt.Media.Asset.Api;
+﻿using Com.Evs.Pam.Orchestrator.Xt.Media.Asset.Api;
 using Com.Evs.Pam.Service.Xtbridge.Api;
 using Com.Evs.Phoenix.Workflow.Protobuf;
 using Confluent.Kafka.Admin;
 using Confluent.Kafka;
-using Oesebus.EVS.KafkaService.Application.Core.Aggregates;
 using Oesebus.EVS.KafkaService.Application.Core.Models;
 using Oesebus.EVS.KafkaService.Application.Core.SerDes;
 using Streamiz.Kafka.Net;
 using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.Stream;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Streamiz.Kafka.Net.Table;
 using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
+using Com.Evs.Pam.Service.Monitoringbridge.Api;
+using Streamiz.Kafka.Net.Table;
 
 namespace Oesebus.Order.Infrastructure.Services
 {
@@ -36,9 +34,20 @@ namespace Oesebus.Order.Infrastructure.Services
       IKStream<string, XtMediaAssetOrchestratorEvent> KS2 = builder.Stream("XtMediaAssetOrchestratorEvent", new StringSerDes(), new XtMediaAssetOrchestratorEventSerDes());
       IKStream<string, XtBridgeCommand> KS3 = builder.Stream("XtBridgeCommand", new StringSerDes(), new XtBridgeCommandSerDes());
       IKStream<string, WorkflowEvent> KS4 = builder.Stream("WorkflowEvent", new StringSerDes(), new WorkflowSerDes());
+      IKStream<string, MonitoringEvent> KS5 = builder.Stream("MonitoringEvent", new StringSerDes(), new MonitoringEventSerDes());
+
+      var MonitoringEventCountBySourceTable = KS5.GroupBy<string, StringSerDes>((k, v) => v.Headers.Source)
+          .Count(InMemory.As<string, long>("MonitoringEventCountBySource-store").WithKeySerdes(new StringSerDes()));
+
+      MonitoringEventCountBySourceTable.ToStream("MonitoringEventCountBySourceStream").To("MonitoringEventCountBySource_KTable");
+
+      //.Stream<string, string>("topic")
+      //         .GroupBy<char, CharSerDes>((k, v) => k.ToCharArray()[0])
+      //         .Count(InMemory<char, long>.As("count-store").WithKeySerdes(new CharSerDes()));
+
 
       ///Filter based on a predicate
-      var KS2Keyed = KS2.Filter((_, v) => v.SpecificCase is not XtMediaAssetOrchestratorEvent.SpecificOneofCase.MediaAssetCreationFailed).MapValues((v) => StoryBuilder.Map(v));
+      //var KS2Keyed = KS2.Filter((_, v) => nameof(v.SpecificCase).ToLower().Contains("failed"));
 
       ///MapValues operator will change the schema from source topic (without changing keys so no data redistribution required)
       //var mappedKS2Stream = KS2Keyed.MapValues((v) => StoryBuilder.Map(v));
@@ -139,7 +148,8 @@ namespace Oesebus.Order.Infrastructure.Services
           var topicsInfo = new TopicSpecification[] {
                     new TopicSpecification { Name = "ServerAddedStreamTopic", ReplicationFactor = 1, NumPartitions = 1 },
                     new TopicSpecification { Name = "ServerUpdatedStreamTopic", ReplicationFactor = 1, NumPartitions = 1 },
-                    new TopicSpecification { Name = "ServerRemovedStreamTopic", ReplicationFactor = 1, NumPartitions = 1 }
+                    new TopicSpecification { Name = "ServerRemovedStreamTopic", ReplicationFactor = 1, NumPartitions = 1 },
+                    new TopicSpecification { Name = "MonitoringEventCountBySource_KTable", ReplicationFactor = 1, NumPartitions = 1 }
           };
 
           await adminClient.CreateTopicsAsync(topicsInfo);
