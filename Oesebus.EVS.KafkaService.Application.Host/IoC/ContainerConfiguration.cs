@@ -1,4 +1,5 @@
 ﻿using System;
+using Com.Evs.Pam.Service.Xtbridge.Api;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging.EventLog;
 using Oesebus.EVS.KafkaService.Application.Core.Interfaces;
 using Oesebus.EVS.KafkaService.Application.Host;
 using Oesebus.EVS.KafkaService.Application.Host.Factories;
+using Oesebus.EVS.KafkaService.Application.Host.Interfaces;
 using Oesebus.EVS.KafkaService.Application.Host.Workers;
 using Oesebus.Order.Infrastructure.Services;
 using Streamiz.Kafka.Net;
@@ -23,7 +25,11 @@ namespace Oesebus.Order.Application.Host.IoC
       Container.AddSingleton<ILogger>(toplogylogger)
                .AddSingleton(StreamConfigurator.Initialize())
                .AddToplogy(new EvsDicussionTopologyBuilder())
-               .AddHostedService<DefaultTopologyStreamWorker>();
+               .AddHostedService<DefaultTopologyStreamWorker>()
+               .AddConsumerService<string, XtBridgeEvent>(null, null)
+               .AddConsumerService<string, XtBridgeEvent>(null, null)
+               .AddConsumerService<string, XtBridgeEvent>(null, null)
+               .AddConsumerService<string, XtBridgeEvent>(null, null);
 
       return Container;
     }

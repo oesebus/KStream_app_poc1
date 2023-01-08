@@ -36,10 +36,10 @@ namespace Oesebus.Order.Infrastructure.Services
       IKStream<string, WorkflowEvent> KS4 = builder.Stream("WorkflowEvent", new StringSerDes(), new WorkflowSerDes());
       IKStream<string, MonitoringEvent> KS5 = builder.Stream("MonitoringEvent", new StringSerDes(), new MonitoringEventSerDes());
 
-      var MonitoringEventCountBySourceTable = KS5.GroupBy<string, StringSerDes>((k, v) => v.Headers.Source)
-          .Count(InMemory.As<string, long>("MonitoringEventCountBySource-store").WithKeySerdes(new StringSerDes()));
+      var MonitoringEventCountBySourceTable = KS5.GroupBy<string, StringSerDes>((_, v) => v.Headers.Source)
+          .Count(RocksDb.As<string, long>("MonitoringEventCountBySource-store").WithKeySerdes(new StringSerDes()));
 
-      MonitoringEventCountBySourceTable.ToStream("MonitoringEventCountBySourceStream").To("MonitoringEventCountBySource_KTable");
+      MonitoringEventCountBySourceTable.ToStream().To("MonitoringEventCountBySource_KTable");
 
       //.Stream<string, string>("topic")
       //         .GroupBy<char, CharSerDes>((k, v) => k.ToCharArray()[0])
@@ -154,9 +154,9 @@ namespace Oesebus.Order.Infrastructure.Services
 
           await adminClient.CreateTopicsAsync(topicsInfo);
         }
-        catch (CreateTopicsException e)
+        catch (CreateTopicsException e) 
         {
-          Console.WriteLine($"An error occured creating topic {e.Results[0].Topic}: {e.Results[0].Error.Reason}");
+          Console.WriteLine($"An error occured during topic creation > {e.Results[0].Topic}: {e.Results[0].Error.Reason}");
         }
       }
     }

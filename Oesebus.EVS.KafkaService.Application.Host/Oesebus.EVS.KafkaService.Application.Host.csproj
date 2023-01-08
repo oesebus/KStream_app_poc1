@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Oesebus.EVS.KafkaService.Infrastructure\Oesebus.EVS.KafkaService.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ConsumerHelpers\" />
+  </ItemGroup>
+
 </Project>

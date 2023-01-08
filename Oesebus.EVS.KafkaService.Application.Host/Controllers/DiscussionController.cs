@@ -1,16 +1,11 @@
 ﻿using Com.Evs.Pam.Service.Monitoringbridge.Api;
 using Microsoft.AspNetCore.Mvc;
-using Oesebus.EVS.KafkaService.Application.Core.SerDes;
 using Streamiz.Kafka.Net;
-using Streamiz.Kafka.Net.SerDes;
 using Streamiz.Kafka.Net.State;
-using System;
-using System.Collections.Generic;
-
 
 namespace Oesebus.Order.Application.Host.Controllers
 {
-  [Route("api/[evscontroller]")]
+  [Route("api/[controller]")]
   [ApiController]
   public class DiscussionController : ControllerBase
   {
@@ -22,25 +17,32 @@ namespace Oesebus.Order.Application.Host.Controllers
       _app = app;
     }
 
-    // GET: api/<OrdersController>
+    // GET: api/<DiscussionController>
     [HttpGet("key")]
     public ActionResult<MonitoringEvent> Get(string key)
     {
       var MonitoringEventStoreBySource = _app.Store
-        (StoreQueryParameters.FromNameAndType("MonitoringEventCountBySource", QueryableStoreTypes.KeyValueStore<string, MonitoringEvent>()));
+        (StoreQueryParameters.FromNameAndType("MonitoringEventCountBySource", QueryableStoreTypes.KeyValueStore<string, long>()));
 
-      var @event = MonitoringEventStoreBySource.Get(key);
+      long? count = MonitoringEventStoreBySource.Get(key);
 
-      return Ok(@event);
-
+      return count is not null ?
+        (ActionResult<MonitoringEvent>)Ok(new { key, count })
+        : (ActionResult<MonitoringEvent>)NotFound(key);
     }
 
-    // GET api/<OrdersController>/5
-    [HttpGet("{~/orders/pending}")]
-    public string ViewPendingOrders()
-    {
-      return "value";
-    }
+    // GET api/<dicussionController>/5
+    //[HttpGet("{~/discussion/views}")]
+    //public ActionResult<IEnumerable<MonitoringEvent>> ViewHighCountsOnly(long max)
+    //{
+    //  var MonitoringEventStoreBySource = _app.Store 
+    //    (StoreQueryParameters.FromNameAndType("MonitoringEventCountBySource", QueryableStoreTypes.KeyValueStore<string, long>()));
+
+    //  var counts = MonitoringEventStoreBySource.All().Where((c) => c.Value > max );
+    //  return counts is not null ?
+    //  (ActionResult<IEnumerable<MonitoringEvent>>)Ok(new { key, count })
+    //    : (ActionResult<IEnumerable<MonitoringEvent>>)NotFound(key);
+    //}
 
     // POST api/<OrdersController>
     //[HttpPost]

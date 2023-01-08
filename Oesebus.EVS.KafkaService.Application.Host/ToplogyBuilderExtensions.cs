@@ -13,7 +13,6 @@ public static class ToplogyBuilderExtensions
              .AddSingleton(builder)
              .AddSingleton((serviceProvider) =>
               KafkaStreamFactory.Create(serviceProvider.GetRequiredService<IBuilder>(), serviceProvider.GetRequiredService<IStreamConfig>()));
-
     return container;
   }
 }
